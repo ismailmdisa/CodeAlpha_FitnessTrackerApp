@@ -7,6 +7,8 @@ import {
   StreakInfo,
   WeekDayCheckmark,
   UserProfile,
+  BiometricTelemetry,
+  DEFAULT_TELEMETRY,
 } from '../types';
 
 export function getTodayDateString(): string {
@@ -114,6 +116,27 @@ export async function initDatabase(): Promise<void> {
   await driver.execAsync(`
     INSERT OR IGNORE INTO profile (id, name, avatar_uri, weight_kg, height_cm, age, gender, member_tier, joined_date)
     VALUES (1, 'Alex Hunter', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400&auto=format&fit=crop', 74.5, 178, 26, 'Male', 'KINETIC PRO ATHLETE', 'Jan 2024');
+  `);
+
+  await driver.execAsync(`
+    CREATE TABLE IF NOT EXISTS telemetry (
+      id INTEGER PRIMARY KEY CHECK (id = 1),
+      rest_heart_rate_bpm INTEGER NOT NULL DEFAULT 48,
+      hrv_ms INTEGER NOT NULL DEFAULT 74,
+      sleep_hours INTEGER NOT NULL DEFAULT 8,
+      sleep_minutes INTEGER NOT NULL DEFAULT 15,
+      sleep_rest_score_pct INTEGER NOT NULL DEFAULT 92,
+      readiness_pct INTEGER NOT NULL DEFAULT 88,
+      strain_score REAL NOT NULL DEFAULT 14.8,
+      water_ml INTEGER NOT NULL DEFAULT 2250,
+      water_target_ml INTEGER NOT NULL DEFAULT 3000,
+      est_body_fat_pct REAL NOT NULL DEFAULT 14.2
+    );
+  `);
+
+  await driver.execAsync(`
+    INSERT OR IGNORE INTO telemetry (id, rest_heart_rate_bpm, hrv_ms, sleep_hours, sleep_minutes, sleep_rest_score_pct, readiness_pct, strain_score, water_ml, water_target_ml, est_body_fat_pct)
+    VALUES (1, 48, 74, 8, 15, 92, 88, 14.8, 2250, 3000, 14.2);
   `);
 }
 
@@ -564,6 +587,65 @@ export async function updateProfileInDb(newProfile: Partial<UserProfile>): Promi
       updated.gender,
       updated.memberTier,
       updated.joinedDate,
+    ]
+  );
+
+  return updated;
+}
+
+export async function getTelemetry(): Promise<BiometricTelemetry> {
+  const driver = await getDatabaseDriver();
+  const row = await driver.getFirstAsync<any>('SELECT * FROM telemetry WHERE id = 1;');
+  if (!row) {
+    return DEFAULT_TELEMETRY;
+  }
+  return {
+    restHeartRateBpm: Number(row.rest_heart_rate_bpm ?? 48),
+    hrvMs: Number(row.hrv_ms ?? 74),
+    sleepHours: Number(row.sleep_hours ?? 8),
+    sleepMinutes: Number(row.sleep_minutes ?? 15),
+    sleepRestScorePct: Number(row.sleep_rest_score_pct ?? 92),
+    readinessPct: Number(row.readiness_pct ?? 88),
+    strainScore: Number(row.strain_score ?? 14.8),
+    waterMl: Number(row.water_ml ?? 2250),
+    waterTargetMl: Number(row.water_target_ml ?? 3000),
+    estBodyFatPct: Number(row.est_body_fat_pct ?? 14.2),
+  };
+}
+
+export async function updateTelemetryInDb(
+  newTelemetry: Partial<BiometricTelemetry>
+): Promise<BiometricTelemetry> {
+  const driver = await getDatabaseDriver();
+  const current = await getTelemetry();
+  const updated: BiometricTelemetry = {
+    restHeartRateBpm: newTelemetry.restHeartRateBpm ?? current.restHeartRateBpm,
+    hrvMs: newTelemetry.hrvMs ?? current.hrvMs,
+    sleepHours: newTelemetry.sleepHours ?? current.sleepHours,
+    sleepMinutes: newTelemetry.sleepMinutes ?? current.sleepMinutes,
+    sleepRestScorePct: newTelemetry.sleepRestScorePct ?? current.sleepRestScorePct,
+    readinessPct: newTelemetry.readinessPct ?? current.readinessPct,
+    strainScore: newTelemetry.strainScore ?? current.strainScore,
+    waterMl: newTelemetry.waterMl ?? current.waterMl,
+    waterTargetMl: newTelemetry.waterTargetMl ?? current.waterTargetMl,
+    estBodyFatPct: newTelemetry.estBodyFatPct ?? current.estBodyFatPct,
+  };
+
+  await driver.runAsync(
+    `UPDATE telemetry 
+     SET rest_heart_rate_bpm = ?, hrv_ms = ?, sleep_hours = ?, sleep_minutes = ?, sleep_rest_score_pct = ?, readiness_pct = ?, strain_score = ?, water_ml = ?, water_target_ml = ?, est_body_fat_pct = ? 
+     WHERE id = 1;`,
+    [
+      updated.restHeartRateBpm,
+      updated.hrvMs,
+      updated.sleepHours,
+      updated.sleepMinutes,
+      updated.sleepRestScorePct,
+      updated.readinessPct,
+      updated.strainScore,
+      updated.waterMl,
+      updated.waterTargetMl,
+      updated.estBodyFatPct,
     ]
   );
 

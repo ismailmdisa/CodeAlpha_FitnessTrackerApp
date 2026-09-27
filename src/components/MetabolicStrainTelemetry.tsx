@@ -1,9 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { HeartPulse, Zap } from 'lucide-react-native';
 import { COLORS } from '../theme/colors';
+import { useFitness } from '../context/FitnessContext';
 
 export const MetabolicStrainTelemetry: React.FC = () => {
+  const { telemetry, setTelemetryModalVisible } = useFitness();
+
   return (
     <View style={styles.card}>
       <View style={styles.headerRow}>
@@ -17,11 +20,15 @@ export const MetabolicStrainTelemetry: React.FC = () => {
           </View>
         </View>
 
-        <View style={styles.strainScorePill}>
+        <TouchableOpacity
+          style={styles.strainScorePill}
+          activeOpacity={0.8}
+          onPress={() => setTelemetryModalVisible(true)}
+        >
           <Zap size={12} color={COLORS.text} fill={COLORS.text} />
-          <Text style={styles.strainScoreVal}>14.8</Text>
+          <Text style={styles.strainScoreVal}>{telemetry.strainScore}</Text>
           <Text style={styles.strainScoreMax}>/ 21</Text>
-        </View>
+        </TouchableOpacity>
       </View>
 
       {/* Segmented Heart Rate Zone Bar */}

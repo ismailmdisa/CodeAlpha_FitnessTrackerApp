@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Droplets, Plus } from 'lucide-react-native';
 import { COLORS } from '../theme/colors';
+import { useFitness } from '../context/FitnessContext';
 
 export const HydrationCapsule: React.FC = () => {
-  const [waterMl, setWaterMl] = useState<number>(2250);
-  const targetMl = 3000;
+  const { telemetry, updateTelemetry, setTelemetryModalVisible } = useFitness();
+  const waterMl = telemetry.waterMl ?? 2250;
+  const targetMl = telemetry.waterTargetMl ?? 3000;
   const pct = Math.min(Math.round((waterMl / targetMl) * 100), 100);
 
   const addWater = (amount: number) => {
-    setWaterMl((prev) => Math.min(prev + amount, 4500));
+    updateTelemetry({ waterMl: Math.min(waterMl + amount, 6000) });
+  };
+
+  const resetWater = () => {
+    updateTelemetry({ waterMl: 0 });
   };
 
   return (
@@ -25,9 +31,13 @@ export const HydrationCapsule: React.FC = () => {
           </View>
         </View>
 
-        <View style={styles.percentagePill}>
-          <Text style={styles.percentageText}>{pct}% Target</Text>
-        </View>
+        <TouchableOpacity
+          style={styles.percentagePill}
+          activeOpacity={0.8}
+          onPress={() => setTelemetryModalVisible(true)}
+        >
+          <Text style={styles.percentageText}>{pct}% Target ⚙️</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Numerical Volume & Liquid Bar */}
@@ -69,7 +79,7 @@ export const HydrationCapsule: React.FC = () => {
         <TouchableOpacity
           style={[styles.incrementBtn, styles.resetBtn]}
           activeOpacity={0.8}
-          onPress={() => setWaterMl(0)}
+          onPress={resetWater}
         >
           <Text style={styles.resetText}>Reset</Text>
         </TouchableOpacity>

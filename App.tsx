@@ -12,6 +12,7 @@ import { AddEditEntryModal } from './src/screens/AddEditEntryModal';
 import { WorkoutDetailModal } from './src/screens/WorkoutDetailModal';
 import { ActiveWorkoutModal } from './src/screens/ActiveWorkoutModal';
 import { WorkoutCompleteModal } from './src/screens/WorkoutCompleteModal';
+import { EditTelemetryModal } from './src/screens/EditTelemetryModal';
 import { StreakPopup } from './src/components/StreakPopup';
 import { ActivityEntry, WorkoutProgram } from './src/types';
 
@@ -142,6 +143,9 @@ const MainApp: React.FC = () => {
           onClose={() => setStreakCelebrationVisible(false)}
           streakCount={newStreakCount || undefined}
         />
+
+        {/* Screen 10: Biometric Telemetry Calibration Modal (BPM, HRV, Sleep, Strain) */}
+        <EditTelemetryModal />
       </View>
     </SafeAreaView>
   );

@@ -98,6 +98,19 @@ function createMemoryStorageDriver(): IDatabaseDriver {
     member_tier: 'KINETIC PRO ATHLETE',
     joined_date: 'Jan 2024',
   };
+  let telemetry: any = {
+    id: 1,
+    rest_heart_rate_bpm: 48,
+    hrv_ms: 74,
+    sleep_hours: 8,
+    sleep_minutes: 15,
+    sleep_rest_score_pct: 92,
+    readiness_pct: 88,
+    strain_score: 14.8,
+    water_ml: 2250,
+    water_target_ml: 3000,
+    est_body_fat_pct: 14.2,
+  };
 
   if (typeof window !== 'undefined' && window.localStorage) {
     try {
@@ -107,6 +120,8 @@ function createMemoryStorageDriver(): IDatabaseDriver {
       if (savedGoals) goals = JSON.parse(savedGoals);
       const savedProfile = window.localStorage.getItem('makefit_user_profile');
       if (savedProfile) profile = JSON.parse(savedProfile);
+      const savedTelemetry = window.localStorage.getItem('makefit_biometric_telemetry');
+      if (savedTelemetry) telemetry = JSON.parse(savedTelemetry);
     } catch (err) {
       console.warn('LocalStorage load error:', err);
     }
@@ -118,6 +133,7 @@ function createMemoryStorageDriver(): IDatabaseDriver {
         window.localStorage.setItem('makefit_activities', JSON.stringify(activities));
         window.localStorage.setItem('makefit_goals', JSON.stringify(goals));
         window.localStorage.setItem('makefit_user_profile', JSON.stringify(profile));
+        window.localStorage.setItem('makefit_biometric_telemetry', JSON.stringify(telemetry));
       } catch (err) {
         console.warn('LocalStorage save error:', err);
       }
@@ -177,6 +193,25 @@ function createMemoryStorageDriver(): IDatabaseDriver {
         }
         return { lastInsertRowId: 1, changes: 1 };
       }
+      if (lower.startsWith('update telemetry') || lower.startsWith('insert or replace into telemetry')) {
+        if (params.length >= 10) {
+          telemetry = {
+            id: 1,
+            rest_heart_rate_bpm: Number(params[0]),
+            hrv_ms: Number(params[1]),
+            sleep_hours: Number(params[2]),
+            sleep_minutes: Number(params[3]),
+            sleep_rest_score_pct: Number(params[4]),
+            readiness_pct: Number(params[5]),
+            strain_score: Number(params[6]),
+            water_ml: Number(params[7]),
+            water_target_ml: Number(params[8]),
+            est_body_fat_pct: Number(params[9]),
+          };
+          persist();
+        }
+        return { lastInsertRowId: 1, changes: 1 };
+      }
       return { lastInsertRowId: 0, changes: 0 };
     },
     async getAllAsync<T = any>(sql: string, params: any[] = []) {
@@ -214,6 +249,9 @@ function createMemoryStorageDriver(): IDatabaseDriver {
       }
       if (lower.includes('from profile')) {
         return { ...profile } as T;
+      }
+      if (lower.includes('from telemetry')) {
+        return { ...telemetry } as T;
       }
       if (lower.includes('from activities where id =')) {
         const [id] = params;

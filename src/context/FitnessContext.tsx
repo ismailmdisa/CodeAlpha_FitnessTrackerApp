@@ -6,6 +6,8 @@ import {
   DayChartPoint,
   StreakInfo,
   UserProfile,
+  BiometricTelemetry,
+  DEFAULT_TELEMETRY,
 } from '../types';
 import {
   initDatabase,
@@ -21,6 +23,8 @@ import {
   updateGoals,
   getProfile,
   updateProfileInDb,
+  getTelemetry,
+  updateTelemetryInDb,
 } from '../database/db';
 
 interface FitnessContextType {
@@ -32,9 +36,12 @@ interface FitnessContextType {
   streakInfo: StreakInfo;
   goals: UserGoals;
   userProfile: UserProfile;
+  telemetry: BiometricTelemetry;
   isLoading: boolean;
   streakCelebrationVisible: boolean;
   newStreakCount: number;
+  telemetryModalVisible: boolean;
+  setTelemetryModalVisible: (visible: boolean) => void;
   setStreakCelebrationVisible: (visible: boolean) => void;
   setChartPeriod: (period: 'daily' | 'weekly' | 'monthly') => void;
   refreshData: () => Promise<void>;
@@ -43,6 +50,7 @@ interface FitnessContextType {
   deleteExistingActivity: (id: string) => Promise<void>;
   saveGoals: (newGoals: Partial<UserGoals>) => Promise<UserGoals>;
   updateProfile: (profile: Partial<UserProfile>) => void;
+  updateTelemetry: (data: Partial<BiometricTelemetry>) => void;
 }
 
 const FitnessContext = createContext<FitnessContextType | undefined>(undefined);
@@ -98,6 +106,37 @@ export const FitnessProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return fallback;
   });
 
+  const [telemetry, setTelemetry] = useState<BiometricTelemetry>(() => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        const saved = window.localStorage.getItem('makefit_biometric_telemetry');
+        if (saved) return { ...DEFAULT_TELEMETRY, ...JSON.parse(saved) };
+      } catch (e) {
+        console.warn('Error reading telemetry from localStorage:', e);
+      }
+    }
+    return DEFAULT_TELEMETRY;
+  });
+
+  const [telemetryModalVisible, setTelemetryModalVisible] = useState<boolean>(false);
+
+  const updateTelemetry = (data: Partial<BiometricTelemetry>) => {
+    setTelemetry((prev) => {
+      const updated = { ...prev, ...data };
+      if (typeof window !== 'undefined' && window.localStorage) {
+        try {
+          window.localStorage.setItem('makefit_biometric_telemetry', JSON.stringify(updated));
+        } catch (e) {
+          console.warn('Error saving telemetry to localStorage:', e);
+        }
+      }
+      updateTelemetryInDb(updated).catch((err) =>
+        console.warn('Error saving telemetry to SQLite:', err)
+      );
+      return updated;
+    });
+  };
+
   const updateProfile = (profile: Partial<UserProfile>) => {
     setUserProfile((prev) => {
       const updated = { ...prev, ...profile };
@@ -129,6 +168,7 @@ export const FitnessProvider: React.FC<{ children: React.ReactNode }> = ({ child
         fetchedStreak,
         fetchedGoals,
         fetchedProfile,
+        fetchedTelemetry,
       ] = await Promise.all([
         getRecentActivities(30),
         getTodayStats(),
@@ -137,6 +177,7 @@ export const FitnessProvider: React.FC<{ children: React.ReactNode }> = ({ child
         getStreakInfo(),
         getGoals(),
         getProfile(),
+        getTelemetry(),
       ]);
 
       setActivities(fetchedActivities);
@@ -147,6 +188,9 @@ export const FitnessProvider: React.FC<{ children: React.ReactNode }> = ({ child
       setGoals(fetchedGoals);
       if (fetchedProfile) {
         setUserProfile((prev) => ({ ...prev, ...fetchedProfile }));
+      }
+      if (fetchedTelemetry) {
+        setTelemetry((prev) => ({ ...prev, ...fetchedTelemetry }));
       }
     } catch (err) {
       console.error('Failed to load fitness data from SQLite:', err);
@@ -224,9 +268,12 @@ export const FitnessProvider: React.FC<{ children: React.ReactNode }> = ({ child
         streakInfo,
         goals,
         userProfile,
+        telemetry,
         isLoading,
         streakCelebrationVisible,
         newStreakCount,
+        telemetryModalVisible,
+        setTelemetryModalVisible,
         setStreakCelebrationVisible,
         setChartPeriod,
         refreshData,
@@ -235,6 +282,7 @@ export const FitnessProvider: React.FC<{ children: React.ReactNode }> = ({ child
         deleteExistingActivity,
         saveGoals,
         updateProfile,
+        updateTelemetry,
       }}
     >
       {children}

@@ -55,6 +55,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     goals,
     activities,
     streakInfo,
+    userProfile,
+    telemetry,
+    setTelemetryModalVisible,
     deleteExistingActivity,
   } = useFitness();
 
@@ -110,23 +113,27 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           <View style={styles.greetingTextColumn}>
             <View style={styles.optimalStateBadge}>
               <View style={styles.optimalDot} />
-              <Text style={styles.optimalText}>OPTIMAL STATE</Text>
+              <Text style={styles.optimalText}>
+                {telemetry.readinessPct >= 85 ? 'OPTIMAL STATE' : telemetry.readinessPct >= 70 ? 'STEADY RECOVERY' : 'ACTIVE REST'}
+              </Text>
             </View>
-            <Text style={styles.greetingTitle}>Good morning, Alex</Text>
+            <Text style={styles.greetingTitle}>
+              Good morning, {userProfile.name?.split(' ')?.[0] || 'Athlete'}
+            </Text>
           </View>
 
-          {/* Readiness Index Pill (code.html lines 16-23) */}
+          {/* Readiness Index Pill (Tap to edit) */}
           <TouchableOpacity
             style={styles.readinessBadge}
             activeOpacity={0.8}
-            onPress={onOpenStreak}
+            onPress={() => setTelemetryModalVisible(true)}
           >
-            <Zap size={15} color={COLORS.primary} fill={COLORS.primary} />
+            <Zap size={14} color={COLORS.primary} fill={COLORS.primary} />
             <View style={styles.readinessNumberGroup}>
-              <Text style={styles.readinessNumber}>96</Text>
+              <Text style={styles.readinessNumber}>{telemetry.readinessPct}</Text>
               <Text style={styles.readinessPercent}>%</Text>
             </View>
-            <Text style={styles.readinessLabel}>READY</Text>
+            <Text style={styles.readinessLabel}>READY ⚙️</Text>
           </TouchableOpacity>
         </View>
 

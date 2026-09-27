@@ -82,3 +82,29 @@ export interface UserProfile {
   joinedDate: string;
 }
 
+export interface BiometricTelemetry {
+  restHeartRateBpm: number;
+  hrvMs: number;
+  sleepHours: number;
+  sleepMinutes: number;
+  sleepRestScorePct: number;
+  readinessPct: number;
+  strainScore: number;
+  waterMl: number;
+  waterTargetMl: number;
+  estBodyFatPct: number;
+}
+
+export const DEFAULT_TELEMETRY: BiometricTelemetry = {
+  restHeartRateBpm: 48,
+  hrvMs: 74,
+  sleepHours: 8,
+  sleepMinutes: 15,
+  sleepRestScorePct: 92,
+  readinessPct: 88,
+  strainScore: 14.8,
+  waterMl: 2250,
+  waterTargetMl: 3000,
+  estBodyFatPct: 14.2,
+};
+

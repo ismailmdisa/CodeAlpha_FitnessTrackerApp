@@ -51,7 +51,15 @@ const PRESET_MALE_AVATARS = [
 ];
 
 export const ProfileScreen: React.FC = () => {
-  const { activities, goals, streakInfo, userProfile, updateProfile } = useFitness();
+  const {
+    activities,
+    goals,
+    streakInfo,
+    userProfile,
+    updateProfile,
+    telemetry,
+    setTelemetryModalVisible,
+  } = useFitness();
 
   const [goalsModalVisible, setGoalsModalVisible] = useState<boolean>(false);
   const [editProfileModalVisible, setEditProfileModalVisible] = useState<boolean>(false);
@@ -307,16 +315,20 @@ export const ProfileScreen: React.FC = () => {
 
             <View style={styles.biometricDivider} />
 
-            <View style={styles.biometricCol}>
+            <TouchableOpacity
+              style={styles.biometricCol}
+              activeOpacity={0.8}
+              onPress={() => setTelemetryModalVisible(true)}
+            >
               <View style={styles.biometricHeader}>
                 <Flame size={13} color={COLORS.secondary} />
                 <Text style={styles.biometricLabel}>EST. FAT</Text>
               </View>
               <Text style={styles.biometricValue}>
-                14.2<Text style={styles.biometricUnit}>%</Text>
+                {telemetry.estBodyFatPct}<Text style={styles.biometricUnit}>%</Text>
               </Text>
-              <Text style={styles.biometricSub}>Athletic Tier</Text>
-            </View>
+              <Text style={styles.biometricSub}>Edit ⚙️</Text>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -383,6 +395,30 @@ export const ProfileScreen: React.FC = () => {
         {/* 5. APP HARDWARE & SYSTEM PREFERENCES */}
         <Text style={styles.sectionHeading}>SYSTEM & SENSORS</Text>
         <View style={styles.settingsGroup}>
+          {/* Biometrics & Telemetry Sensor Calibration */}
+          <TouchableOpacity
+            style={styles.settingRow}
+            activeOpacity={0.7}
+            onPress={() => setTelemetryModalVisible(true)}
+          >
+            <View style={styles.settingRowLeft}>
+              <View style={styles.settingIconSquare}>
+                <ActivityIcon size={16} color={COLORS.primary} />
+              </View>
+              <View>
+                <Text style={styles.settingLabel}>Telemetry & Sensor Data</Text>
+                <Text style={styles.settingDesc}>
+                  Rest HR ({telemetry.restHeartRateBpm} bpm), HRV ({telemetry.hrvMs} ms), Sleep, Strain ({telemetry.strainScore})
+                </Text>
+              </View>
+            </View>
+            <View style={styles.unitBadge}>
+              <Text style={styles.unitBadgeText}>EDIT ✏️</Text>
+            </View>
+          </TouchableOpacity>
+
+          <View style={styles.settingDivider} />
+
           {/* Sensor Pedometer Toggle */}
           <View style={styles.settingRow}>
             <View style={styles.settingRowLeft}>
