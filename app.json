@@ -1,0 +1,42 @@
+{
+  "expo": {
+    "name": "KINETIC - Fitness Tracker",
+    "slug": "CodeAlpha_FitnessTrackerApp",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#121310"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.codealpha.kinetickfitnesstracker"
+    },
+    "android": {
+      "package": "com.codealpha.kinetickfitnesstracker",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#121310"
+      },
+      "permissions": [
+        "android.permission.ACTIVITY_RECOGNITION"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-sqlite"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "codealpha-fitness-tracker"
+      }
+    }
+  }
+}
