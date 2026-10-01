@@ -43,12 +43,6 @@ export const MobileDeviceFrame: React.FC<MobileDeviceFrameProps> = ({ children }
       {/* Subtle Studio Ambient Backdrop Glow */}
       <View style={styles.ambientGlow} />
 
-      {/* Floating Device Showcase Badge */}
-      <View style={styles.showcaseHeader}>
-        <View style={styles.showcaseDot} />
-        <Text style={styles.showcaseText}>MOBILE APPLICATION EMULATOR • REACT NATIVE</Text>
-      </View>
-
       {/* Smartphone Chassis (Flagship Titanium Body) */}
       <View style={styles.phoneChassis}>
         {/* Outer Titanium Rim Accent */}
@@ -109,47 +103,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#0d0f0c', // Studio obsidian backdrop
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 18,
+    paddingVertical: 10,
     position: 'relative',
     overflow: 'hidden',
   },
   ambientGlow: {
     position: 'absolute',
     top: '20%',
-    width: 600,
-    height: 600,
-    borderRadius: 300,
+    width: 650,
+    height: 650,
+    borderRadius: 325,
     backgroundColor: 'rgba(200, 224, 30, 0.035)', // subtle chartreuse halo
   },
-  showcaseHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginBottom: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)',
-  },
-  showcaseDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#c8e01e',
-  },
-  showcaseText: {
-    fontSize: 9.5,
-    fontWeight: '800',
-    color: '#a0a58c',
-    letterSpacing: 1.2,
-  },
   phoneChassis: {
-    width: 410,
-    height: 846,
-    maxHeight: '94vh' as any,
-    borderRadius: 48,
+    width: 445,
+    height: 900,
+    maxHeight: '96vh' as any,
+    borderRadius: 52,
     backgroundColor: '#1c1e19', // Titanium frame
     padding: 3,
     borderWidth: 1.5,
@@ -162,7 +132,7 @@ const styles = StyleSheet.create({
   },
   phoneOuterRim: {
     flex: 1,
-    borderRadius: 45,
+    borderRadius: 49,
     backgroundColor: '#0a0b08', // Black bezel
     padding: 7,
     borderWidth: 1,
@@ -170,7 +140,7 @@ const styles = StyleSheet.create({
   },
   phoneScreen: {
     flex: 1,
-    borderRadius: 38,
+    borderRadius: 42,
     backgroundColor: COLORS.background,
     overflow: 'hidden',
     position: 'relative',
@@ -259,6 +229,7 @@ const styles = StyleSheet.create({
   appViewport: {
     flex: 1,
     position: 'relative',
+    overflow: 'hidden',
   },
   homeIndicatorRow: {
     height: 14,
