@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Modal,
   View,
   Text,
   StyleSheet,
@@ -8,6 +7,7 @@ import {
 } from 'react-native';
 import { Check, Flame, Clock } from 'lucide-react-native';
 import { COLORS } from '../theme/colors';
+import { AppModal } from '../components/AppModal';
 
 interface WorkoutCompleteModalProps {
   visible: boolean;
@@ -23,7 +23,7 @@ export const WorkoutCompleteModal: React.FC<WorkoutCompleteModalProps> = ({
   onClose,
 }) => {
   return (
-    <Modal visible={visible} animationType="fade" transparent={true} onRequestClose={onClose}>
+    <AppModal visible={visible} animationType="fade" transparent={true} onRequestClose={onClose}>
       <View style={styles.overlay}>
         <View style={styles.contentCard}>
           {/* Big Checkmark Circle (Image 3 style) */}
@@ -59,7 +59,7 @@ export const WorkoutCompleteModal: React.FC<WorkoutCompleteModalProps> = ({
           </TouchableOpacity>
         </View>
       </View>
-    </Modal>
+    </AppModal>
   );
 };
 

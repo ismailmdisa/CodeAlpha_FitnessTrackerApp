@@ -48,7 +48,7 @@ export const AppModal: React.FC<AppModalProps> = ({
 const styles = StyleSheet.create({
   webFixedOverlay: {
     // @ts-ignore
-    position: 'fixed',
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,

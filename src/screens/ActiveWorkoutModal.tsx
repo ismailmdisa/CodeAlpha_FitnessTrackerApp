@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  Modal,
   View,
   Text,
   StyleSheet,
@@ -19,6 +18,7 @@ import { COLORS } from '../theme/colors';
 import { WorkoutProgram } from '../types';
 import { useFitness } from '../context/FitnessContext';
 import { getTodayDateString } from '../database/db';
+import { AppModal } from '../components/AppModal';
 
 interface ActiveWorkoutModalProps {
   visible: boolean;
@@ -117,7 +117,7 @@ export const ActiveWorkoutModal: React.FC<ActiveWorkoutModalProps> = ({
   };
 
   return (
-    <Modal visible={visible} animationType="slide" transparent={false} onRequestClose={onClose}>
+    <AppModal visible={visible} animationType="slide" transparent={false} onRequestClose={onClose}>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.container}>
           {/* Top Bar */}
@@ -200,7 +200,7 @@ export const ActiveWorkoutModal: React.FC<ActiveWorkoutModalProps> = ({
           </View>
         </View>
       </SafeAreaView>
-    </Modal>
+    </AppModal>
   );
 };
 

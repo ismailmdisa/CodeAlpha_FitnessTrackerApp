@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Modal,
   View,
   Text,
   StyleSheet,
@@ -12,6 +11,7 @@ import {
 import { X, Check, Footprints, Flame, Clock } from 'lucide-react-native';
 import { COLORS } from '../theme/colors';
 import { useFitness } from '../context/FitnessContext';
+import { AppModal } from '../components/AppModal';
 
 interface EditGoalsModalProps {
   visible: boolean;
@@ -68,7 +68,7 @@ export const EditGoalsModal: React.FC<EditGoalsModalProps> = ({ visible, onClose
   };
 
   return (
-    <Modal visible={visible} animationType="slide" transparent={true} onRequestClose={onClose}>
+    <AppModal visible={visible} animationType="slide" transparent={true} onRequestClose={onClose}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.overlay}
@@ -190,7 +190,7 @@ export const EditGoalsModal: React.FC<EditGoalsModalProps> = ({ visible, onClose
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
-    </Modal>
+    </AppModal>
   );
 };
 
