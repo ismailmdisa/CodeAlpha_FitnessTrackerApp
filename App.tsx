@@ -20,7 +20,17 @@ import { ActivityEntry, WorkoutProgram } from './src/types';
 const MainApp: React.FC = () => {
   const { streakCelebrationVisible, setStreakCelebrationVisible, newStreakCount } = useFitness();
 
-  const [currentTab, setCurrentTab] = useState<TabType>('home');
+  const getInitialTab = (): TabType => {
+    if (Platform.OS === 'web' && typeof window !== 'undefined' && window.location.hash) {
+      const hash = window.location.hash.replace('#', '') as TabType;
+      if (['home', 'workouts', 'progress', 'profile'].includes(hash)) {
+        return hash;
+      }
+    }
+    return 'home';
+  };
+
+  const [currentTab, setCurrentTab] = useState<TabType>(getInitialTab);
   const [addEditModalVisible, setAddEditModalVisible] = useState<boolean>(false);
   const [editingEntry, setEditingEntry] = useState<ActivityEntry | null>(null);
 

@@ -8,7 +8,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "test:db": "node test_db_cycle.js"
+    "test:db": "node tests/test_db_cycle.js"
   },
   "dependencies": {
     "@expo/metro-runtime": "~4.0.1",
