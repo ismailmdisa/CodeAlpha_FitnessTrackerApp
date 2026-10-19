@@ -8,6 +8,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![SQLite](https://img.shields.io/badge/SQLite-Local_Engine-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Open_Web_App-brightgreen?style=for-the-badge&logo=googlechrome&logoColor=white)](https://ismailmdisa.github.io/CodeAlpha_FitnessTrackerApp/)
 
 <br />
 
@@ -19,7 +20,7 @@
 
 <br />
 
-[Features](#-key-features) • [CodeAlpha Matrix](#-codealpha-task-3-requirements-matrix) • [Screenshots](#-screenshots--ui-walkthrough) • [Database Architecture](#-database-architecture-sqlite) • [Getting Started](#-getting-started) • [License](#-license)
+[🚀 **Open Live App**](https://ismailmdisa.github.io/CodeAlpha_FitnessTrackerApp/) • [Features](#-key-features) • [CodeAlpha Matrix](#-codealpha-task-3-requirements-matrix) • [Screenshots](#-screenshots--ui-walkthrough) • [Database Architecture](#-database-architecture-sqlite) • [Getting Started](#-getting-started) • [License](#-license)
 
 </div>
 
