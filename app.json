@@ -37,6 +37,9 @@
       "eas": {
         "projectId": "codealpha-fitness-tracker"
       }
+    },
+    "experiments": {
+      "baseUrl": "/CodeAlpha_FitnessTrackerApp"
     }
   }
 }
